@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import './style.scss';
@@ -203,36 +204,38 @@ const feelingData = {
 
 
 class Feeling extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      color: props.color
-    }
+      color: undefined,
+    };
   }
 
   componentWillMount() {
-    this.color = randomFlatColor()
+    this.setState({
+      color: randomFlatColor(),
+    });
   }
 
+
   render() {
-    const { closeFeeling, openFeeling, subfeelings, name, index } = this.props;
-    const color = this.color;
-  
+    const {
+      closeFeeling, openFeeling, subfeelings, name, index,
+    } = this.props;
+    const { color } = this.state;
+
     const style = {
       backgroundColor: color,
     };
-    
+
     return (
       <div style={style} key={index} onClick={event => openFeeling(event, name, subfeelings)} className="feeling">
         <button type="button" onClick={event => closeFeeling(event, name)} className="feeling__close-button">╳</button>
         <span className="feeling__label">{name}</span>
       </div>
-    )
-
+    );
   }
 }
-
 
 
 class App extends Component {
@@ -242,17 +245,26 @@ class App extends Component {
     this.state = {
       availableFeelings: ['good', 'bad'],
       feelingData,
-      selectedFeelings: [],
+      selectedFeelings: new Set(),
     };
     this.openFeeling = this.openFeeling.bind(this);
     this.closeFeeling = this.closeFeeling.bind(this);
     this.resetFeelings = this.resetFeelings.bind(this);
+    this.shareFeelings = this.shareFeelings.bind(this);
   }
 
   resetFeelings() {
     this.setState({
-      availableFeelings: ['good', 'bad']
-    })
+      availableFeelings: ['good', 'bad'],
+    });
+  }
+
+  shareFeelings() {
+    const { selectedFeelings } = this.state;
+    navigator.share({
+      title: 'How I feel...',
+      text: [...selectedFeelings].join(', '),
+    });
   }
 
   openFeeling(event, feeling, subfeelings) {
@@ -260,7 +272,7 @@ class App extends Component {
 
     this.setState((prevState) => {
       const newSelectedFeelings = prevState.selectedFeelings;
-      newSelectedFeelings.push(feeling);
+      newSelectedFeelings.add(feeling);
       return {
         selectedFeelings: newSelectedFeelings,
       };
@@ -272,9 +284,9 @@ class App extends Component {
       newFeelings.splice(feelingIndex, 1);
       newFeelings = subfeelings || newFeelings;
       if (newFeelings.length === 0) {
-        alert('no more feelings')
+        alert('no more feelings');
         this.resetFeelings();
-      }        
+      }
       // subfeelings && newFeelings.push(...subfeelings);
       l(newFeelings);
       return {
@@ -299,19 +311,22 @@ class App extends Component {
 
   render() {
     const { availableFeelings, feelingData, selectedFeelings } = this.state;
-    const feelingsJSX = availableFeelings.map((feeling, index) => <Feeling index={index} name={feeling} color={randomFlatColor()} openFeeling={this.openFeeling} subfeelings={feelingData[feeling] || false} closeFeeling={this.closeFeeling} />);
-    const selectedFeelingsJSX = selectedFeelings.join(', ');
+    const feelingsJSX = availableFeelings.map((feeling, index) => <Feeling index={index} name={feeling} openFeeling={this.openFeeling} subfeelings={feelingData[feeling] || false} closeFeeling={this.closeFeeling} />);
+    const selectedFeelingsJSX = [...selectedFeelings].join(', ');
 
     return (
-      <main>
+      <div className="wrapper">
         <section className="selected-feelings">
           {selectedFeelingsJSX}
         </section>
-        <section className="feeling-list">
-          {feelingsJSX}
-        </section>
-
-      </main>
+        <main>
+          <section className="feeling-list">
+            {feelingsJSX}
+          </section>
+        </main>
+        <button type="button" className="back-button" onClick={this.resetFeelings}>⬅ back</button>
+        <button type="button" className="share-button" onClick={this.shareFeelings}> Send</button>
+      </div>
     );
   }
 }

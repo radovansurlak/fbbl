@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito:700');
+@import url('https://fonts.googleapis.com/css?family=Nunito:700,800');
 
 %reset-button {
   font: inherit;
@@ -28,10 +28,17 @@
   font-weight: 700;
 }
 
+button {
+  outline: none;
+
+  @extend %reset-button;
+}
+
 html,
 body,
 #root,
-main {
+main,
+.wrapper {
   height: 100%;
 }
 
@@ -87,8 +94,6 @@ main {
     border-radius: 50px;
     background-color: black;
 
-    @extend %reset-button;
-
     &:hover {
       background-color: gray;
     }
@@ -97,4 +102,28 @@ main {
 
 .selected-feelings {
   display: table-row;
+}
+
+.back-button,
+.share-button {
+  position: fixed;
+  bottom: 0;
+
+  display: block;
+
+  margin: 0 auto;
+  margin-bottom: 10px;
+  padding: 20px;
+
+  border-radius: 60px;
+  background-color: #f1c40f;
+  box-shadow: 0 5px 5px 0 rgba(0,0,0,.2);;
+}
+
+.share-button {
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background-color: #e67e22;
 }
