@@ -1,7 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/no-multi-comp */
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import './style.scss';
@@ -124,12 +120,14 @@ class App extends Component {
     const selectedFeelingsJSX = selectedFeelings.join(', ');
 
     return (
-      <div>
-        {feelingsJSX}
+      <main>
+        <section>
+          {feelingsJSX}
+        </section>
         <footer className="selected-feelings">
           {selectedFeelingsJSX}
         </footer>
-      </div>
+      </main>
     );
   }
 }
