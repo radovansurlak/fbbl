@@ -10,6 +10,7 @@
   "quotes": "single",
   "remove-empty-rulesets": true,
   "sort-order": [
+    ["$variable"],
     [
       "font",
       "font-family",
