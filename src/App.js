@@ -75,26 +75,39 @@ class App extends Component {
       availableFeelings: ['good', 'bad'],
       feelingData: JSON.parse(feelingJSON),
       selectedFeelings: new Set(),
+      removedFeelings: new Set(),
     };
     this.openFeeling = this.openFeeling.bind(this);
     this.closeFeeling = this.closeFeeling.bind(this);
-    this.resetFeelings = this.resetFeelings.bind(this);
+    this.goToStart = this.goToStart.bind(this);
     this.shareFeelings = this.shareFeelings.bind(this);
+    this.resetFeelings = this.resetFeelings.bind(this);
   }
 
-  resetFeelings() {
+  goToStart() {
     this.setState({
       availableFeelings: ['good', 'bad'],
       feelingData: JSON.parse(feelingJSON),
     });
   }
 
+  resetFeelings() {
+    this.setState({
+      availableFeelings: ['good', 'bad'],
+      feelingData: JSON.parse(feelingJSON),
+      selectedFeelings: new Set(),
+      removedFeelings: new Set(),
+    });
+  }
+
   shareFeelings() {
     const { selectedFeelings } = this.state;
-    navigator.share({
-      title: 'How I feel...',
-      text: [...selectedFeelings].join(', '),
-    });
+    if (navigator.share) {
+      navigator.share({
+        title: 'How I feel...',
+        text: [...selectedFeelings].join(', '),
+      });
+    }
   }
 
   openFeeling(event, feeling, subfeelings) {
@@ -115,10 +128,8 @@ class App extends Component {
       newFeelings = subfeelings || newFeelings;
       if (newFeelings.length === 0) {
         alert('no more feelings');
-        this.resetFeelings();
+        this.goToStart();
       }
-      // subfeelings && newFeelings.push(...subfeelings);
-      l(newFeelings);
       return {
         availableFeelings: newFeelings,
       };
@@ -128,21 +139,38 @@ class App extends Component {
   closeFeeling(event, feeling) {
     event.stopPropagation();
 
-    const { availableFeelings } = this.state;
-    const feelingIndex = availableFeelings.indexOf(feeling);
+    const feelingIndex = this.state.availableFeelings.indexOf(feeling);
+
     this.setState((prevState) => {
       const newFeelings = prevState.availableFeelings;
+      const newRemovedFeelings = prevState.removedFeelings;
+
       newFeelings.splice(feelingIndex, 1);
+      newRemovedFeelings.add(feeling);
       return {
         availableFeelings: newFeelings,
+        removedFeelings: newRemovedFeelings,
       };
     });
   }
 
   render() {
-    const { availableFeelings, feelingData, selectedFeelings } = this.state;
+    const {
+      availableFeelings, feelingData, removedFeelings, selectedFeelings,
+    } = this.state;
 
-    const filteredFeelings = availableFeelings.filter(feeling => !selectedFeelings.has(feeling) || feelingData[feeling]);
+    // const filteredFeelings = availableFeelings.filter(feeling => !selectedFeelings.has(feeling) || feelingData[feeling] || feeling === 'bad');
+    function feelingToShow(feeling) {
+      if (selectedFeelings.has(feeling) && !feelingData[feeling]) {
+        return true;
+      }
+      if (removedFeelings.has(feeling)) {
+        return true;
+      }
+    }
+
+
+    const filteredFeelings = availableFeelings.filter(feeling => !feelingToShow(feeling));
 
 
     const feelingsJSX = filteredFeelings.map((feeling, index) => <Feeling index={index} name={feeling} openFeeling={this.openFeeling} subfeelings={feelingData[feeling] || false} closeFeeling={this.closeFeeling} />);
@@ -159,8 +187,9 @@ class App extends Component {
             {feelingsJSX}
           </section>
         </main>
-        <button type="button" className="back-button" onClick={this.resetFeelings}>⬅ back</button>
-        <button type="button" className="share-button" onClick={this.shareFeelings}> Send</button>
+        <button type="button" className="back-button" onClick={this.goToStart}>⬅ back</button>
+        <button type="button" className="share-button" onClick={this.shareFeelings}>Send</button>
+        <button type="button" className="share-button" onClick={this.resetFeelings}>Reset</button>
       </div>
     );
   }
