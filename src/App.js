@@ -174,13 +174,20 @@ class App extends Component {
 
     // const filteredFeelings = availableFeelings.filter(feeling => !selectedFeelings.has(feeling) || feelingData[feeling] || feeling === 'bad');
     function feelingToShow(feeling) {
-      if (selectedFeelings.has(feeling) && !feelingData[feeling]) {
+      if (feelingData[feeling] && feelingData[feeling].every(subfeeling => [...selectedFeelings].includes(subfeeling))) {
+        return true;
+      }
+      if (selectedFeelings.has(feeling) && !feelingData[feeling]
+      ) {
         return true;
       }
       if (removedFeelings.has(feeling)) {
         return true;
       }
     }
+
+    window.feelingData = feelingData;
+    window.selectedFeelings = [...selectedFeelings];
 
 
     const filteredFeelings = availableFeelings.filter(feeling => !feelingToShow(feeling));
