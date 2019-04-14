@@ -29,6 +29,7 @@ function randomFlatColor() {
   return colors[0];
 }
 
+
 function copyToClipboard(str) {
   const el = document.createElement('textarea');
   el.value = str;
@@ -137,7 +138,6 @@ class App extends Component {
       newFeelings.splice(feelingIndex, 1);
       newFeelings = subfeelings || newFeelings;
       if (newFeelings.length === 0) {
-        alert('no more feelings');
         this.goToStart();
       }
       return {
@@ -169,7 +169,7 @@ class App extends Component {
       availableFeelings, feelingData, removedFeelings, selectedFeelings,
     } = this.state;
 
-    // const filteredFeelings = availableFeelings.filter(feeling => !selectedFeelings.has(feeling) || feelingData[feeling] || feeling === 'bad');
+
     function feelingToShow(feeling) {
       if (feelingData[feeling] && feelingData[feeling].every(subfeeling => [...selectedFeelings].includes(subfeeling))) {
         return true;
@@ -199,14 +199,17 @@ class App extends Component {
         <section className="selected-feelings">
           {selectedFeelingsString}
         </section>
-        <main>
-          <section className="feeling-list">
-            {feelingsJSX}
-          </section>
+        <section className="heading">
+          <span className="heading__title">How are you feeling?</span>
+        </section>
+        <main className="feeling-list">
+          {feelingsJSX}
         </main>
-        <button type="button" className="back-button" onClick={this.goToStart}>⬅ back</button>
-        <button type="button" className="share-button" onClick={this.shareFeelings}>Send</button>
-        <button type="button" className="share-button" onClick={this.resetFeelings}>Reset</button>
+        <section className="buttons">
+          <button type="button" className="back-button" onClick={this.goToStart}>⬅ back</button>
+          <button type="button" className="share-button" onClick={this.shareFeelings}>Send</button>
+          <button type="button" className="share-button" onClick={this.resetFeelings}>Reset</button>
+        </section>
       </div>
     );
   }
