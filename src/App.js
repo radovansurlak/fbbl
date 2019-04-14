@@ -3,7 +3,11 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import './style.scss';
 
+import feelingJSON from './feelings.json';
+
+
 const l = console.log;
+
 
 function randomFlatColor() {
   const colors = [
@@ -25,182 +29,8 @@ function randomFlatColor() {
     'rgb(192, 57, 43)',
 
   ];
-  return colors[Math.floor(Math.random() * colors.length)];
+  return colors[0];
 }
-
-
-const feelingData = {
-  bad: [
-    'sad',
-    'hurt',
-    'angry',
-    'depressed',
-    'confused',
-    'helpless',
-    'afraid',
-    'indifferent',
-  ],
-  good: [
-    'happy',
-    'satisfied',
-  ],
-  afraid: [
-    'fearful',
-    'terrified',
-    'suspicious',
-    'anxious',
-    'alarmed',
-    'panic',
-    'nervous',
-    'scared',
-    'worried',
-    'frightened',
-    'timid',
-    'shaky',
-    'restless',
-    'doubtful',
-    'threatened',
-    'cowardly',
-    'quaking',
-    'menaced',
-    'wary',
-  ],
-  sad: [
-    'tearful',
-    'sorrowful',
-    'pained',
-    'grief',
-    'anguish',
-    'desolate',
-    'desperate',
-    'pessimistic',
-    'unhappy',
-    'lonely',
-    'grieved',
-    'mournful',
-    'dismayed',
-  ],
-  angry:
-    [
-      'irritated',
-      'enraged',
-      'hostile',
-      'insulting',
-      'sore',
-      'annoyed',
-      'upset',
-      'hateful',
-      'unpleasant',
-      'offensive',
-      'bitter',
-      'aggressive',
-      'resentful',
-      'inflamed',
-      'provoked',
-      'incensed',
-      'infuriated',
-      'cross',
-      'worked up',
-      'boiling',
-      'fuming',
-      'indignant',
-    ],
-  depressed:
-    [
-      'lousy',
-      'disappointed',
-      'discouraged',
-      'ashamed',
-      'powerless',
-      'diminished',
-      'guilty',
-      'dissatisfied',
-      'miserable',
-      'detestable',
-      'repugnant',
-      'despicable',
-      'disgusting',
-      'abominable',
-      'terrible',
-      'in despair',
-      'sulky',
-      'a sense of loss',
-    ],
-  helpless: [
-    'incapable',
-    'alone',
-    'paralyzed',
-    'fatigued',
-    'useless',
-    'inferior',
-    'vulnerable',
-    'empty',
-    'forced',
-    'hesitant',
-    'despair',
-    'frustrated',
-    'distressed',
-    'woeful',
-    'pathetic',
-    'tragic',
-    'in a stew',
-    'dominated',
-  ],
-  indifferent: [
-    'insensitive',
-    'dull',
-    'nonchalant',
-    'neutral',
-    'reserved',
-    'weary',
-    'bored',
-    'preoccupied',
-    'cold',
-    'disinterested',
-    'lifeless',
-  ],
-
-  confused: [
-    'doubtful',
-    'uncertain',
-    'indecisive',
-    'perplexed',
-    'embarrassed',
-    'hesitant',
-    'shy',
-    'stupefied',
-    'disillusioned',
-    'unbelieving',
-    'skeptical',
-    'distrustful',
-    'misgiving',
-    'lost',
-    'unsure',
-    'uneasy',
-    'pessimistic',
-    'tense',
-  ],
-  hurt: [
-    'crushed',
-    'tormented',
-    'deprived',
-    'pained',
-    'tortured',
-    'dejected',
-    'rejected',
-    'injured',
-    'offended',
-    'afflicted',
-    'aching',
-    'victimized',
-    'heartbroken',
-    'agonized',
-    'appalled',
-    'humiliated',
-    'wronged',
-    'alienated',
-  ],
-};
 
 
 class Feeling extends Component {
@@ -237,14 +67,13 @@ class Feeling extends Component {
   }
 }
 
-
 class App extends Component {
   constructor() {
     super();
 
     this.state = {
       availableFeelings: ['good', 'bad'],
-      feelingData,
+      feelingData: JSON.parse(feelingJSON),
       selectedFeelings: new Set(),
     };
     this.openFeeling = this.openFeeling.bind(this);
@@ -256,6 +85,7 @@ class App extends Component {
   resetFeelings() {
     this.setState({
       availableFeelings: ['good', 'bad'],
+      feelingData: JSON.parse(feelingJSON),
     });
   }
 
@@ -311,7 +141,12 @@ class App extends Component {
 
   render() {
     const { availableFeelings, feelingData, selectedFeelings } = this.state;
-    const feelingsJSX = availableFeelings.map((feeling, index) => <Feeling index={index} name={feeling} openFeeling={this.openFeeling} subfeelings={feelingData[feeling] || false} closeFeeling={this.closeFeeling} />);
+
+    const filteredFeelings = availableFeelings.filter(feeling => !selectedFeelings.has(feeling) || feelingData[feeling]);
+
+
+    const feelingsJSX = filteredFeelings.map((feeling, index) => <Feeling index={index} name={feeling} openFeeling={this.openFeeling} subfeelings={feelingData[feeling] || false} closeFeeling={this.closeFeeling} />);
+
     const selectedFeelingsJSX = [...selectedFeelings].join(', ');
 
     return (
