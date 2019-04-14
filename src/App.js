@@ -32,6 +32,15 @@ function randomFlatColor() {
   return colors[0];
 }
 
+function copyToClipboard(str) {
+  const el = document.createElement('textarea');
+  el.value = str;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+}
+
 
 class Feeling extends Component {
   constructor(props) {
@@ -102,11 +111,15 @@ class App extends Component {
 
   shareFeelings() {
     const { selectedFeelings } = this.state;
+    const feelingsToShare = [...selectedFeelings].join(', ');
     if (navigator.share) {
       navigator.share({
         title: 'How I feel...',
-        text: [...selectedFeelings].join(', '),
+        text: feelingsToShare,
       });
+    } else {
+      copyToClipboard(feelingsToShare);
+      alert(feelingsToShare);
     }
   }
 
@@ -175,12 +188,12 @@ class App extends Component {
 
     const feelingsJSX = filteredFeelings.map((feeling, index) => <Feeling index={index} name={feeling} openFeeling={this.openFeeling} subfeelings={feelingData[feeling] || false} closeFeeling={this.closeFeeling} />);
 
-    const selectedFeelingsJSX = [...selectedFeelings].join(', ');
+    const selectedFeelingsString = [...selectedFeelings].join(', ');
 
     return (
       <div className="wrapper">
         <section className="selected-feelings">
-          {selectedFeelingsJSX}
+          {selectedFeelingsString}
         </section>
         <main>
           <section className="feeling-list">
