@@ -6,9 +6,6 @@ import './style.scss';
 import feelingJSON from './feelings.json';
 
 
-const l = console.log;
-
-
 function randomFlatColor() {
   const colors = [
     'rgb(26, 188, 156)',
@@ -112,7 +109,7 @@ class App extends Component {
   shareFeelings() {
     const { selectedFeelings } = this.state;
     const feelingsToShare = [...selectedFeelings].join(', ');
-    if (navigator.share) {
+    if (navigator.share !== undefined) {
       navigator.share({
         title: 'How I feel...',
         text: feelingsToShare,
