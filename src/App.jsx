@@ -26,7 +26,7 @@ function randomFlatColor() {
     'rgb(192, 57, 43)',
 
   ];
-  return colors[0];
+  return colors[Math.floor(Math.random() * colors.length)];
 }
 
 
@@ -192,7 +192,7 @@ class App extends Component {
 
     const feelingsJSX = filteredFeelings.map((feeling, index) => <Feeling index={index} name={feeling} openFeeling={this.openFeeling} subfeelings={feelingData[feeling] || false} closeFeeling={this.closeFeeling} />);
 
-    const selectedFeelingsString = [...selectedFeelings].join(', ');
+    const selectedFeelingsString = [...selectedFeelings].map(feeling => <span className="selected-feeling">{feeling}</span>);
 
     return (
       <div className="wrapper">
@@ -206,9 +206,9 @@ class App extends Component {
           {feelingsJSX}
         </main>
         <section className="buttons">
+          <button type="button" className="reset-button" onClick={this.resetFeelings}>reset</button>
+          <button type="button" className="share-button" onClick={this.shareFeelings}>send</button>
           <button type="button" className="back-button" onClick={this.goToStart}>⬅ back</button>
-          <button type="button" className="share-button" onClick={this.shareFeelings}>Send</button>
-          <button type="button" className="share-button" onClick={this.resetFeelings}>Reset</button>
         </section>
       </div>
     );
