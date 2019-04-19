@@ -54,8 +54,11 @@ class App extends Component {
   }
 
   shareFeelings() {
-    const { selectedFeelings } = this.state;
-    const feelingsToShare = [...selectedFeelings].join(', ');
+    const { selectedFeelings, feelingIntensities } = this.state;
+    const feelingsToShare = [...selectedFeelings].map(selectedFeeling => {
+      const feelingIntensity = feelingIntensities.get(selectedFeeling)
+      return feelingIntensity ? `${selectedFeeling} ${feelingIntensity}` : selectedFeeling;
+    }).join(', ');
     if (navigator.share !== undefined) {
       navigator.share({
         title: 'How I feel...',
