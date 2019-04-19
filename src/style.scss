@@ -83,7 +83,7 @@ button {
   display: flex;
 
   margin: 4px;
-  padding: 10px;
+  padding: 5px;
   padding-right: 21px;
 
   cursor: pointer;
@@ -184,12 +184,86 @@ button {
   }
 }
 
+input[type=range].slider {
+  -webkit-appearance: none;
+  width: 100%;
+  background-color: transparent;
+  margin: 0 20px;
+}
+input[type=range].slider:focus {
+  outline: none;
+}
+input[type=range].slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 32px;
+  cursor: pointer;
+}
+input[type=range].slider::-webkit-slider-thumb {
+  box-shadow: 2.5px 2.5px 13.7px rgba(0, 0, 0, 0.36), 0px 0px 2.5px rgba(13, 13, 13, 0.36);
+  height: 32px;
+  width: 50px;
+  border-radius: 47px;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  transform: scale(1.1);
+}
+input[type=range].slider:focus::-webkit-slider-runnable-track {
+  background: rgba(5, 5, 5, 0);
+}
+input[type=range].slider::-moz-range-track {
+  width: 100%;
+  height: 32px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range].slider::-moz-range-thumb {
+  box-shadow: 2.5px 2.5px 13.7px rgba(0, 0, 0, 0.36), 0px 0px 2.5px rgba(13, 13, 13, 0.36);
+  height: 50px;
+  width: 50px;
+  border-radius: 47px;
+  background: #ffffff;
+  cursor: pointer; 
+  transform: scale(1.3);
+}
+input[type=range].slider::-ms-track {
+  width: 100%;
+  height: 32px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range].slider::-ms-fill-lower {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range].slider::-ms-fill-upper {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range].slider::-ms-thumb {
+  box-shadow: 2.5px 2.5px 13.7px rgba(0, 0, 0, 0.36), 0px 0px 2.5px rgba(13, 13, 13, 0.36);
+  width: 50px;
+  border-radius: 47px;
+  background: #ffffff;
+  cursor: pointer;
+  height: 32px;
+  transform: scale(1.3);
+}
+input[type=range].slider:focus::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0);
+}
+input[type=range].slider:focus::-ms-fill-upper {
+  background: rgba(5, 5, 5, 0);
+}
+
+
 .feeling-intensity {
-  $size: 27px;
+  flex-shrink: 0;
+  $size: 32px;
 
   line-height: $size;
 
-  display: inline-block;
+  display: block;
 
   width: $size;
   height: $size;
@@ -199,13 +273,6 @@ button {
   color: #000;
   border-radius: $size;
   background-color: white;
-}
-
-.feeling-slider {
-  margin-right: 10px;
-  margin-left: 10px;
-
-  flex-grow: 1;
 }
 
 .selected-feelings {

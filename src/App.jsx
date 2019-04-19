@@ -71,7 +71,8 @@ class App extends Component {
   }
 
   openFeeling(event, feeling, subfeelings) {
-    if (event.target.className === 'feeling-slider') return;
+    alert(event.target.className)
+    if (event.target.className.includes('feeling-slider')) return;
 
     const feelingIndex = this.state.availableFeelings.indexOf(feeling);
 

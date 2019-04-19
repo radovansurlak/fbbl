@@ -56,7 +56,7 @@ export default class Feeling extends Component {
       <div tabIndex={0} role="button" style={style} key={index} onClick={event => openFeeling(event, name, subfeelings)} className="feeling">
         {/* <button type="button" onClick={event => closeFeeling(event, name)} className="feeling__close-button">╳</button> */}
         <span className="feeling-intensity">{intensity}</span>
-        <input onChange={event => updateIntensity(name, event.target.value)} type="range" min="1" max="10" value={intensity} className="feeling-slider" />
+        <input onChange={event => updateIntensity(name, event.target.value)} type="range" min="1" max="10" value={intensity} className="slider feeling-slider" />
         <span className="feeling__label">{name}</span>
       </div>
     );
