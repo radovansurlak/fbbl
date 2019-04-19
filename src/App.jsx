@@ -49,6 +49,7 @@ class App extends Component {
       feelingData: JSON.parse(feelingJSON),
       selectedFeelings: new Set(),
       removedFeelings: new Set(),
+      feelingIntensities: new Map()
     });
   }
 
@@ -145,9 +146,9 @@ class App extends Component {
     const filteredFeelings = availableFeelings.filter(feeling => !feelingToShow(feeling));
 
 
-    const feelingsJSX = filteredFeelings.map((feeling, index) => <Feeling index={index} key={index} name={feeling} openFeeling={this.openFeeling} subfeelings={feelingData[feeling] || false} intensity={feelingIntensities.get(feeling) || 1} updateIntensity={updateFeelingIntensity} closeFeeling={this.closeFeeling} />);
+    const feelingsJSX = filteredFeelings.map((feeling, index) => <Feeling index={index} key={index} name={feeling} openFeeling={this.openFeeling} subfeelings={feelingData[feeling] || false} intensity={feelingIntensities.get(feeling) || 5} updateIntensity={updateFeelingIntensity} closeFeeling={this.closeFeeling} />);
 
-    const selectedFeelingsString = [...selectedFeelings].map(feeling => <span className="selected-feeling">{feeling}</span>);
+    const selectedFeelingsString = [...selectedFeelings].map(feeling => <span className="selected-feeling">{feeling} {feelingIntensities.get(feeling)}</span>);
 
     return (
       <div className="wrapper">
