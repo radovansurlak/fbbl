@@ -69,6 +69,7 @@ class App extends Component {
       alert(feelingsToShare);
     }
   }
+  
 
   openFeeling(event, feeling, subfeelings) {
     if (event.target.className.includes('feeling-slider')) return;
